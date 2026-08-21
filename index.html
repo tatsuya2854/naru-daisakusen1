@@ -1,0 +1,320 @@
+<!-- ===== ここから貼り付け ===== -->
+<!-- 画像はYouTubeのサムネを直接読み込んでいます（アップロード不要・差し替え不要）
+     自分でアップした画像に変えたい場合は、各 <img> の src を自分のURLに置き換えてください
+-->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap');
+
+.hw-wrap{
+  --hw-night:#170C24;
+  --hw-night2:#211135;
+  --hw-pumpkin:#FF7A18;
+  --hw-ember:#FFB63A;
+  --hw-ghost:#C9B6FF;
+  --hw-slime:#8BE04E;
+  --hw-witch:#FF4D7E;
+  --hw-bone:#FFF6E9;
+  max-width:680px;
+  margin:0 auto;
+  border-radius:22px;
+  overflow:hidden;
+  background:var(--hw-night);
+  font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","ヒラギノ丸ゴ ProN W4",sans-serif;
+  line-height:1.6;
+  box-shadow:0 20px 50px -24px rgba(0,0,0,.9);
+  -webkit-font-smoothing:antialiased;
+}
+.hw-wrap *{box-sizing:border-box;}
+
+/* ---- ヘッダー ---- */
+.hw-head{
+  position:relative;
+  padding:44px 22px 40px;
+  text-align:center;
+  color:#fff;
+  background:
+    radial-gradient(circle at 50% 6%, rgba(255,182,58,.34), transparent 46%),
+    radial-gradient(circle at 12% 88%, rgba(139,224,78,.16), transparent 44%),
+    linear-gradient(170deg, #35134F 0%, #211135 55%, #170C24 100%);
+  overflow:hidden;
+}
+.hw-moon{
+  position:absolute;top:22px;left:50%;transform:translateX(-50%);
+  width:66px;height:66px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%, #FFE9B0, #FFC24D 62%, #FF9A2E);
+  box-shadow:0 0 44px 14px rgba(255,183,71,.42);
+  opacity:.9;
+}
+.hw-bat{
+  position:absolute;
+  font-size:17px;
+  opacity:.85;
+  animation:hw-fly 7s ease-in-out infinite;
+}
+.hw-bat:nth-of-type(1){top:34px;left:9%;animation-delay:0s;}
+.hw-bat:nth-of-type(2){top:74px;right:12%;font-size:13px;animation-delay:1.6s;}
+.hw-bat:nth-of-type(3){bottom:44px;left:18%;font-size:12px;animation-delay:3.1s;opacity:.6;}
+@keyframes hw-fly{
+  0%,100%{transform:translate(0,0) rotate(-4deg);}
+  50%{transform:translate(14px,-13px) rotate(6deg);}
+}
+.hw-title{
+  position:relative;
+  margin:34px 0 0;
+  font-size:44px;line-height:1;
+  font-family:"Creepster","M PLUS Rounded 1c",cursive;
+  letter-spacing:.03em;
+  color:var(--hw-pumpkin);
+  text-shadow:0 0 18px rgba(255,122,24,.6), 3px 4px 0 #5A1B0B;
+}
+.hw-sub{
+  position:relative;
+  margin:8px 0 0;
+  font-size:25px;font-weight:800;color:#fff;
+  text-shadow:2px 3px 0 #6B2FA8;
+}
+.hw-lead{
+  position:relative;
+  margin:16px 0 0;
+  font-size:13.5px;font-weight:500;color:#E9DDFF;
+}
+.hw-lead strong{color:var(--hw-ember);font-weight:800;}
+.hw-drip{
+  position:relative;
+  height:8px;
+  background:var(--hw-pumpkin);
+  z-index:3;
+}
+.hw-drip::after{
+  content:"";
+  position:absolute;top:100%;left:0;right:0;height:16px;
+  background:
+    radial-gradient(circle at 13px 0, var(--hw-pumpkin) 12px, transparent 13px) repeat-x;
+  background-size:52px 30px;
+}
+.hw-drip::before{
+  content:"";
+  position:absolute;top:100%;left:26px;right:0;height:22px;
+  background:
+    radial-gradient(circle at 11px 0, var(--hw-pumpkin) 9px, transparent 10px) repeat-x;
+  background-size:52px 30px;
+  opacity:.9;
+}
+
+/* ---- 日別リスト ---- */
+.hw-list{list-style:none;margin:0;padding:22px 0 0;}
+.hw-day{
+  position:relative;
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  padding:16px;
+  color:#fff;
+}
+.hw-day:nth-child(odd){background:var(--hw-night2);}
+.hw-day:nth-child(even){background:var(--hw-night);}
+.hw-day + .hw-day{border-top:2px dashed rgba(255,122,24,.35);}
+.hw-day:nth-child(1){--hw-c:var(--hw-pumpkin);}
+.hw-day:nth-child(2){--hw-c:var(--hw-ghost);}
+.hw-day:nth-child(3){--hw-c:var(--hw-witch);}
+.hw-day:nth-child(4){--hw-c:var(--hw-slime);}
+
+.hw-icon{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:27px;
+  background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.16), rgba(0,0,0,.35));
+  border:2px solid var(--hw-c);
+  box-shadow:0 0 16px -2px var(--hw-c);
+  animation:hw-glow 3.4s ease-in-out infinite;
+  transition:transform .3s cubic-bezier(.2,.8,.3,1);
+}
+.hw-day:nth-child(2) .hw-icon{animation-delay:.8s;}
+.hw-day:nth-child(3) .hw-icon{animation-delay:1.6s;}
+.hw-day:nth-child(4) .hw-icon{animation-delay:2.4s;}
+@keyframes hw-glow{
+  0%,100%{box-shadow:0 0 14px -3px var(--hw-c);}
+  50%{box-shadow:0 0 24px 2px var(--hw-c);}
+}
+
+/* ---- カード（リンク） ---- */
+.hw-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:10px;
+  min-width:0;
+  text-decoration:none;
+  color:#fff;
+}
+.hw-meta{display:flex;align-items:center;gap:9px;}
+.hw-part{
+  border:1.5px solid var(--hw-c);
+  color:var(--hw-c);
+  border-radius:999px;
+  padding:2px 12px;
+  font-size:11.5px;font-weight:700;
+  white-space:nowrap;
+}
+.hw-num{
+  font-size:22px;font-weight:800;letter-spacing:.02em;
+  color:#fff;
+  text-shadow:0 0 12px var(--hw-c);
+}
+.hw-thumb{
+  min-width:0;
+  background:var(--hw-bone);
+  border-radius:13px;
+  padding:6px 6px 2px;
+  box-shadow:0 4px 0 rgba(0,0,0,.5);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .3s ease;
+}
+.hw-thumb img{
+  display:block;width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  border-radius:9px;
+  background:#E6DACD;
+}
+.hw-cap{
+  display:block;
+  color:#2C1B33;
+  font-size:11.5px;font-weight:700;
+  padding:7px 3px 6px;
+  line-height:1.45;
+}
+.hw-cap em{font-style:normal;color:#B23A1A;}
+
+/* ---- ホバー / タップ ---- */
+.hw-card:hover .hw-thumb,
+.hw-card:focus-visible .hw-thumb{
+  transform:translateY(-8px) rotate(-.8deg);
+  box-shadow:0 13px 0 rgba(0,0,0,.5), 0 0 26px -2px var(--hw-c);
+}
+.hw-day:hover .hw-icon{transform:scale(1.14) rotate(-10deg);}
+.hw-card:focus-visible{outline:3px solid var(--hw-c);outline-offset:4px;}
+.hw-card:active .hw-thumb{transform:translateY(-2px);}
+
+/* ---- フッター ---- */
+.hw-foot{
+  position:relative;
+  text-align:center;
+  padding:26px 18px 30px;
+  color:#fff;
+  font-size:13.5px;font-weight:700;
+  background:radial-gradient(circle at 50% 120%, rgba(139,224,78,.28), transparent 60%), var(--hw-night2);
+}
+.hw-foot span{
+  display:block;font-size:26px;margin-bottom:6px;
+  animation:hw-float 3.6s ease-in-out infinite;
+}
+@keyframes hw-float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-7px);}
+}
+
+/* ---- PC表示 ---- */
+@media (min-width:620px){
+  .hw-head{padding:52px 26px 46px;}
+  .hw-title{font-size:56px;}
+  .hw-sub{font-size:30px;}
+  .hw-day{grid-template-columns:62px minmax(0,1fr);gap:16px;padding:18px 20px;}
+  .hw-icon{width:62px;height:62px;font-size:30px;}
+  .hw-card{grid-template-columns:132px minmax(0,1fr);align-items:center;gap:16px;}
+  .hw-meta{flex-direction:column;align-items:flex-start;gap:6px;}
+  .hw-num{font-size:26px;}
+  .hw-cap{font-size:12.5px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hw-wrap *{animation:none !important;transition:none !important;}
+  .hw-day:hover .hw-icon,
+  .hw-card:hover .hw-thumb{transform:none;}
+}
+</style>
+
+<div class="hw-wrap">
+
+  <div class="hw-head">
+    <div class="hw-moon"></div>
+    <div class="hw-bat">🦇</div>
+    <div class="hw-bat">🦇</div>
+    <div class="hw-bat">🦇</div>
+    <h2 class="hw-title">Halloween</h2>
+    <p class="hw-sub">大作戦 🎃</p>
+    <p class="hw-lead">
+      お菓子食べた分、ちゃんと動こ。<br>
+      <strong>1日1本、上から順番に！</strong><br>
+      動けた日はカボチャに火を灯そう🔥
+    </p>
+  </div>
+  <div class="hw-drip"></div>
+
+  <ol class="hw-list">
+
+    <li class="hw-day">
+      <div class="hw-icon">🎃</div>
+      <a class="hw-card" href="https://youtu.be/EihK14OuD10" target="_blank" rel="noopener noreferrer">
+        <div class="hw-meta">
+          <span class="hw-part">全身＋お腹</span>
+          <span class="hw-num">Day1</span>
+        </div>
+        <div class="hw-thumb">
+          <img src="https://img.youtube.com/vi/EihK14OuD10/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/EihK14OuD10/hqdefault.jpg';" loading="lazy" alt="Day1 引くほどお腹へこむ">
+          <span class="hw-cap">引くほどお腹へこむ　<em>1週間チャレンジ</em></span>
+        </div>
+      </a>
+    </li>
+
+    <li class="hw-day">
+      <div class="hw-icon">👻</div>
+      <a class="hw-card" href="https://youtu.be/Rqi1KJtW0FA" target="_blank" rel="noopener noreferrer">
+        <div class="hw-meta">
+          <span class="hw-part">顔</span>
+          <span class="hw-num">Day2</span>
+        </div>
+        <div class="hw-thumb">
+          <img src="https://img.youtube.com/vi/Rqi1KJtW0FA/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/Rqi1KJtW0FA/hqdefault.jpg';" loading="lazy" alt="Day2 顔痩せソーラン 1日3分">
+          <span class="hw-cap">限界！顔痩せソーラン　<em>1日3分</em></span>
+        </div>
+      </a>
+    </li>
+
+    <li class="hw-day">
+      <div class="hw-icon">🦇</div>
+      <a class="hw-card" href="https://youtu.be/0xUCA_SatQI" target="_blank" rel="noopener noreferrer">
+        <div class="hw-meta">
+          <span class="hw-part">足</span>
+          <span class="hw-num">Day3</span>
+        </div>
+        <div class="hw-thumb">
+          <img src="https://img.youtube.com/vi/0xUCA_SatQI/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/0xUCA_SatQI/hqdefault.jpg';" loading="lazy" alt="Day3 楽園から地獄超えの脚やせ 8分">
+          <span class="hw-cap">楽園→地獄超えの脚やせ　<em>8分</em></span>
+        </div>
+      </a>
+    </li>
+
+    <li class="hw-day">
+      <div class="hw-icon">🕸️</div>
+      <a class="hw-card" href="https://youtu.be/gNtu--Z24Gc" target="_blank" rel="noopener noreferrer">
+        <div class="hw-meta">
+          <span class="hw-part">全身</span>
+          <span class="hw-num">Day4</span>
+        </div>
+        <div class="hw-thumb">
+          <img src="https://img.youtube.com/vi/gNtu--Z24Gc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/gNtu--Z24Gc/hqdefault.jpg';" loading="lazy" alt="Day4 シン・フリフリダンス 9分">
+          <span class="hw-cap">シン・フリフリダンス　<em>9分・Level★★★</em></span>
+        </div>
+      </a>
+    </li>
+
+  </ol>
+
+  <div class="hw-foot">
+    <span>👻</span>
+    待ってろよ！今日よりカワイイ明日の自分！
+  </div>
+
+</div>
+<!-- ===== ここまで ===== -->
