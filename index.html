@@ -465,8 +465,18 @@ body{
   var flash=document.getElementById('flash');
   var BASE='待ってろよ！今日よりカワイイ明日の自分！';
 
-  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}}
-  function save(s){try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
+  /* URLの末尾に ?fresh を付けて開くと、初回訪問と同じ「全部消えた状態」で確認できる */
+  try{ if(location.search.indexOf('fresh')>-1) localStorage.removeItem(KEY); }catch(e){}
+  var EXPIRE=30*24*60*60*1000;   /* 最後に触ってから30日で自動リセット＝翌シーズンは真っさら */
+  function load(){
+    try{
+      var raw=JSON.parse(localStorage.getItem(KEY)); if(!raw) return {};
+      var d=raw.days||raw, ts=raw.ts||0;
+      if(ts && Date.now()-ts>EXPIRE){ localStorage.removeItem(KEY); return {}; }
+      return d;
+    }catch(e){ return {}; }
+  }
+  function save(d){ try{ localStorage.setItem(KEY,JSON.stringify({v:1,days:d,ts:Date.now()})); }catch(e){} }
   function buzz(ms){try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}}
   function wob(t,s){return Math.sin(t*0.63+s)*0.62+Math.sin(t*1.37+s*2.3)*0.27+Math.sin(t*2.71+s*3.9)*0.11;}
 
