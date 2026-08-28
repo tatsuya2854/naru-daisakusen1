@@ -213,6 +213,41 @@ body{
 }
 .lamp.on .hint{opacity:0;}
 .day.today .lamp .hint{color:var(--ember);animation:beat 2s ease-in-out infinite;}
+/* 霧 */
+.fog{position:absolute;left:-25%;right:-25%;height:130px;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse at 30% 60%,rgba(214,196,255,.15),transparent 62%),
+             radial-gradient(ellipse at 72% 40%,rgba(255,255,255,.10),transparent 60%);
+  filter:blur(6px);}
+.head .fog{bottom:-24px;animation:drift1 46s linear infinite;}
+.head .fog.f2{bottom:-46px;opacity:.7;animation:drift2 71s linear infinite;}
+.foot .fog{bottom:-30px;height:110px;animation:drift2 58s linear infinite;}
+@keyframes drift1{0%{transform:translateX(-6%);}50%{transform:translateX(6%);}100%{transform:translateX(-6%);}}
+@keyframes drift2{0%{transform:translateX(7%);}50%{transform:translateX(-7%);}100%{transform:translateX(7%);}}
+
+/* 糸を垂らすクモ */
+.spider{position:absolute;top:0;width:46px;margin-left:-23px;z-index:4;pointer-events:none;
+  transform:translateY(-150px);will-change:transform;}
+.spider .thread{position:absolute;left:50%;bottom:100%;width:2px;height:1200px;margin-left:-1px;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(226,214,255,.55));}
+.spider svg{display:block;width:100%;height:auto;overflow:visible;pointer-events:auto;cursor:pointer;
+  filter:drop-shadow(0 0 6px rgba(201,182,255,.4));}
+
+/* おばけを触ると驚く */
+.foot .ghost{cursor:pointer;}
+.foot .ghost.boo svg{animation:boo .9s var(--ease);}
+@keyframes boo{0%{opacity:1;transform:scale(1);}18%{opacity:.12;transform:scale(1.3) rotate(-6deg);}
+  46%{opacity:.12;transform:scale(.7);}100%{opacity:1;transform:scale(1);}}
+.boobub{position:absolute;left:50%;top:-6px;transform:translate(-50%,6px) scale(.6);
+  padding:5px 12px;border-radius:999px;background:#FFF1DC;color:#3A1E44;
+  font-size:12px;font-weight:800;opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .25s,transform .45s var(--spring);}
+.boobub.show{opacity:1;transform:translate(-50%,-4px) scale(1);}
+
+.spark{position:fixed;width:7px;height:7px;border-radius:50%;pointer-events:none;z-index:35;
+  box-shadow:0 0 10px currentColor;background:currentColor;}
+.moon{cursor:pointer;}
+.moon.hit{animation:moonHit .6s var(--spring);}
+@keyframes moonHit{0%{transform:scale(1);}40%{transform:scale(1.22);filter:brightness(1.5);}100%{transform:scale(1);}}
 .ember{position:absolute;left:50%;top:40%;width:6px;height:6px;border-radius:50%;background:var(--ember);pointer-events:none;}
 
 /* ══ カード ══ */
@@ -269,6 +304,7 @@ body{
 .foot{
   position:relative;text-align:center;padding:30px 18px 36px;font-size:13.5px;font-weight:700;
   background:radial-gradient(circle at 50% 132%,rgba(139,224,78,.22),transparent 62%),var(--panel);
+  position:relative;overflow:hidden;
   overflow:hidden;
 }
 .foot .ghost{width:52px;margin:0 auto 10px;will-change:transform;}
@@ -470,6 +506,9 @@ body{
 
   <header class="head">
     <button class="bgm" id="bgm" type="button" aria-pressed="false"><span class="wave"><i></i><i></i><i></i></span>BGM</button>
+    <div class="fog"></div>
+    <div class="fog f2"></div>
+    <div class="spider" id="spider"><span class="thread"></span><svg viewBox="0 0 46 40"><g class="legs" stroke="#120A1C" stroke-width="2.6" fill="none" stroke-linecap="round"><path class="lg" d="M18 20C12 17 8 13 5 8"/><path class="lg" d="M18 23C11 23 7 24 2 22"/><path class="lg" d="M18 26C12 29 9 32 6 37"/><path class="lg" d="M19 28C16 32 15 35 15 39"/><path class="rg" d="M28 20C34 17 38 13 41 8"/><path class="rg" d="M28 23C35 23 39 24 44 22"/><path class="rg" d="M28 26C34 29 37 32 40 37"/><path class="rg" d="M27 28C30 32 31 35 31 39"/></g><ellipse cx="23" cy="17" rx="6" ry="5" fill="#1A1026"/><ellipse cx="23" cy="26" rx="9" ry="9.5" fill="#120A1C"/><circle cx="20.4" cy="16" r="1.5" fill="#FF9E9E"/><circle cx="25.6" cy="16" r="1.5" fill="#FF9E9E"/></svg></div>
     <div class="moon" id="moon"></div>
     <div class="bat b1" data-w="46"></div>
     <div class="bat b2" data-w="34"></div>
@@ -640,7 +679,9 @@ body{
   <div class="flash" id="flash"></div>
 
   <footer class="foot" id="foot">
-    <div class="ghost">
+    <div class="fog"></div>
+    <span class="boobub" id="boobub">わっ！</span>
+    <div class="ghost" id="ghostWrap">
       <svg viewBox="0 0 48 56">
         <g id="gBody">
           <path d="M24 2C12 2 6 12 6 23v27l6-5 6 5 6-5 6 5 6-5 6 5V23C42 12 36 2 24 2z" fill="#EDE7FF"/>
@@ -977,6 +1018,59 @@ body{
   render(false);
 
 
+
+  /* ══════════ 見る人が触って遊べる仕掛け ══════════ */
+  var pointer={x:-9999,y:-9999,at:0};
+  var sparkCount=0, lastSpark=0;
+  var SPARK_COLORS=['#FFB63A','#FF7A18','#F79CC4','#FFE27A'];
+  function spark(x,y){
+    if(reduce||sparkCount>22||!document.body.animate) return;
+    var el=document.createElement('span'); el.className='spark';
+    el.style.color=SPARK_COLORS[(Math.random()*SPARK_COLORS.length)|0];
+    el.style.left=(x-3.5)+'px'; el.style.top=(y-3.5)+'px';
+    document.body.appendChild(el); sparkCount++;
+    var dx=(Math.random()-.5)*26, dy=-18-Math.random()*26;
+    el.animate([
+      {transform:'translate(0,0) scale(1)',opacity:.95},
+      {transform:'translate('+dx+'px,'+dy+'px) scale(0)',opacity:0}
+    ],{duration:620+Math.random()*380,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=function(){
+      el.remove(); sparkCount--;
+    };
+  }
+  if(!reduce){
+    document.addEventListener('pointermove',function(e){
+      pointer.x=e.clientX; pointer.y=e.clientY; pointer.at=performance.now();
+      var n=performance.now();
+      if(n-lastSpark>65){ lastSpark=n; spark(e.clientX,e.clientY); }
+    },{passive:true});
+    document.addEventListener('pointerdown',function(e){
+      pointer.x=e.clientX; pointer.y=e.clientY; pointer.at=performance.now();
+      for(var i=0;i<4;i++) spark(e.clientX+(Math.random()-.5)*14,e.clientY+(Math.random()-.5)*14);
+    },{passive:true});
+  }
+
+  /* 月を3回つづけてタップすると…… */
+  var moonHits=0, moonAt=0;
+  var moonEl=document.getElementById('moon');
+  if(moonEl) moonEl.addEventListener('click',function(){
+    var n=Date.now();
+    moonHits=(n-moonAt<2600)?moonHits+1:1; moonAt=n;
+    moonEl.classList.remove('hit'); void moonEl.offsetWidth; moonEl.classList.add('hit');
+    var r=moonEl.getBoundingClientRect();
+    for(var i=0;i<8;i++) spark(r.left+r.width/2+(Math.random()-.5)*70, r.top+r.height/2+(Math.random()-.5)*70);
+    if(moonHits>=3){
+      moonHits=0;
+      if(window.__batSwarm) window.__batSwarm();
+      toast('トリック・オア・トリート！🍬');
+      if(canSfx()){
+        var t=ctx.currentTime;
+        sweep(900,180,t,.5,.12); sweep(200,1500,t+.4,.5,.09);
+        [523.25,622.25,784,1046.5].forEach(function(f,i){ tone(f,t+.85+i*.08,.8,'triangle',.11); });
+      }
+      buzz([12,50,12]);
+    }
+  });
+
   /* ══════════ 達成画面・周回・シェア ══════════ */
   var ovl=document.getElementById('ovl'), scRow=document.getElementById('scRow');
   var toastEl=document.getElementById('toast');
@@ -1087,12 +1181,50 @@ body{
       setTimeout(function(){b.el.classList.add('show');},320+i*160);
     });
 
+    window.__batSwarm=function(){
+      bats.forEach(function(b,i){
+        b.speed=.075; b.flap=17;
+        b.tx=box.w*(i%2?.05:.92)-b.w/2; b.ty=14+Math.random()*40; b.next=performance.now()/1000+1.4;
+        setTimeout(function(){ b.speed=.016+Math.random()*.012; b.flap=8+Math.random()*3; },2600);
+      });
+    };
     var kingRig=null; rigs.forEach(function(r){ if(r.king) kingRig=r; });
     var breathEl=document.querySelector('.breath');
     var gWrap=document.querySelector('.foot .ghost');
     var gBody=document.getElementById('gBody'),gEyes=document.getElementById('gEyes'),gMouth=document.getElementById('gMouth');
-    var gBlinkAt=2+Math.random()*3, gBlinkEnd=0, cheerUntil=0;
+    var gBlinkAt=2+Math.random()*3, gBlinkEnd=0, cheerUntil=0, gLx, gLy;
     window.__ghostCheer=function(){cheerUntil=performance.now()/1000+1.8;};
+
+
+    /* 天井からクモが糸で降りてくる（たまに） */
+    var sp=document.getElementById('spider');
+    var spSt={y:-150,ty:-150,next:12+Math.random()*14,phase:0,busy:false};
+    var spLegs=sp?[].slice.call(sp.querySelectorAll('.lg')):[];
+    var spLegsR=sp?[].slice.call(sp.querySelectorAll('.rg')):[];
+    function spiderDrop(){
+      spSt.busy=true;
+      sp.style.left=(10+Math.random()*48)+'%';
+      spSt.ty=70+Math.random()*70;
+      setTimeout(function(){ spSt.ty=-150; setTimeout(function(){spSt.busy=false;},2600); },5200+Math.random()*3000);
+    }
+    if(sp) sp.querySelector('svg').addEventListener('click',function(){
+      spSt.ty=-150;
+      var r=sp.getBoundingClientRect();
+      for(var i=0;i<7;i++) spark(r.left+r.width/2+(Math.random()-.5)*30, r.top+r.height/2+(Math.random()-.5)*20);
+      if(canSfx()){ var t=ctx.currentTime; sweep(320,1500,t,.28,.09); }
+      buzz(10);
+      setTimeout(function(){spSt.busy=false;},2000);
+    });
+
+    /* おばけを触ると消えて驚かせる */
+    var boob=document.getElementById('boobub');
+    if(gWrap) gWrap.addEventListener('click',function(){
+      gWrap.classList.remove('boo'); void gWrap.offsetWidth; gWrap.classList.add('boo');
+      boob.classList.add('show');
+      setTimeout(function(){ boob.classList.remove('show'); },1100);
+      if(canSfx()){ var t=ctx.currentTime; sweep(1200,240,t,.34,.11); tone(196,t+.3,.5,'sine',.12); }
+      buzz([8,40,8]);
+    });
 
     var t0=performance.now(), running=true;
     document.addEventListener('visibilitychange',function(){
@@ -1153,13 +1285,36 @@ body{
           r.mouth.setAttribute('transform','translate(40,60) scale('+(1+.10*ke).toFixed(3)+','+(1+.55*ke).toFixed(3)+') translate(-40,-60)'); }
         /* まばたき＋横目 */
         if(t>r.blinkAt){ r.blinkEnd=t+.11; r.blinkAt=t+2+Math.random()*4.5; }
-        var k=(t<r.blinkEnd)?.1:1, look=wob(t*.37,s+3)*1.5;
-        r.eyeL.setAttribute('transform','translate('+(30+look).toFixed(2)+',45) scale(1,'+k+') translate(-30,-45)');
-        r.eyeR.setAttribute('transform','translate('+(50+look).toFixed(2)+',45) scale(1,'+k+') translate(-50,-45)');
+        var k=(t<r.blinkEnd)?.1:1;
+        /* 指（またはカーソル）が近くにあるとそっちを見る。離れたら勝手にきょろきょろ */
+        var look, lookY=0;
+        if(now-pointer.at<2400){
+          var rc=r.el.getBoundingClientRect();
+          look=Math.max(-2.6,Math.min(2.6,(pointer.x-(rc.left+rc.width/2))/26));
+          lookY=Math.max(-2,Math.min(2,(pointer.y-(rc.top+rc.height/2))/34));
+        }else{ look=wob(t*.37,s+3)*1.5; }
+        r.lx=(r.lx===undefined?look:r.lx+(look-r.lx)*.18);
+        r.ly=(r.ly===undefined?lookY:r.ly+(lookY-r.ly)*.18);
+        look=r.lx;
+        r.eyeL.setAttribute('transform','translate('+(30+look).toFixed(2)+','+(45+r.ly).toFixed(2)+') scale(1,'+k+') translate(-30,-45)');
+        r.eyeR.setAttribute('transform','translate('+(50+look).toFixed(2)+','+(45+r.ly).toFixed(2)+') scale(1,'+k+') translate(-50,-45)');
         /* 口はロウソクの息づかいに合わせて動く */
         var m=1+wob(t*1.6,s+6)*.09;
         if(!r.king) r.mouth.setAttribute('transform','translate('+(40+look*.6).toFixed(2)+',60) scale('+m.toFixed(3)+','+(1/m).toFixed(3)+') translate(-40,-60)');
       });
+
+      /* クモ：糸を伝ってゆっくり上下、脚はワサワサ */
+      if(sp){
+        if(!spSt.busy && t>spSt.next){ spSt.next=t+26+Math.random()*22; spiderDrop(); }
+        spSt.y+=(spSt.ty-spSt.y)*0.028;
+        var swing=Math.sin(t*1.6)*(spSt.y>0?3:0);
+        sp.style.transform='translate3d('+swing.toFixed(2)+'px,'+spSt.y.toFixed(1)+'px,0)';
+        var lw=Math.sin(t*7)*8;
+        for(var li=0;li<spLegs.length;li++){
+          spLegs[li].setAttribute('transform','rotate('+(lw*(li%2?1:-1)*.6).toFixed(2)+',18,24)');
+          if(spLegsR[li]) spLegsR[li].setAttribute('transform','rotate('+(-lw*(li%2?1:-1)*.6).toFixed(2)+',28,24)');
+        }
+      }
 
       if(gBody){
         var hop=(cheerUntil>now/1000)?Math.abs(Math.sin((cheerUntil-now/1000)*7))*16:0;
@@ -1167,9 +1322,18 @@ body{
         var sx=1+wob(t*.9,4.2)*.045;
         gBody.setAttribute('transform','translate(24,30) scale('+sx.toFixed(3)+','+(2-sx).toFixed(3)+') translate(-24,-30)');
         if(t>gBlinkAt){ gBlinkEnd=t+.12; gBlinkAt=t+2.2+Math.random()*4.5; }
-        var gk=(t<gBlinkEnd)?.08:1, gl=wob(t*.33,12.4)*1.6;
-        gEyes.setAttribute('transform','translate('+gl.toFixed(2)+',24) scale(1,'+gk+') translate(0,-24)');
-        gMouth.setAttribute('transform','translate('+(gl*.6).toFixed(2)+',0)');
+        var gk=(t<gBlinkEnd)?.08:1, gl, gy;
+        if(now-pointer.at<2400){
+          var gr=gWrap.getBoundingClientRect();
+          var ang=Math.atan2(pointer.y-(gr.top+gr.height*.42), pointer.x-(gr.left+gr.width/2));
+          var dist=Math.hypot(pointer.x-(gr.left+gr.width/2), pointer.y-(gr.top+gr.height*.42));
+          var amt=Math.min(1,dist/120);          /* 近いほど寄り目、遠いほど目一杯 */
+          gl=Math.cos(ang)*2.6*amt; gy=Math.sin(ang)*2.4*amt;   /* 斜めもそのまま角度で追う */
+        }else{ gl=wob(t*.33,12.4)*1.6; gy=wob(t*.27,20.5)*1.1; }
+        gLx=(gLx===undefined?gl:gLx+(gl-gLx)*.18); gl=gLx;
+        gLy=(gLy===undefined?gy:gLy+(gy-gLy)*.18); gy=gLy;
+        gEyes.setAttribute('transform','translate('+gl.toFixed(2)+','+(24+gy).toFixed(2)+') scale(1,'+gk+') translate(0,-24)');
+        gMouth.setAttribute('transform','translate('+(gl*.6).toFixed(2)+','+(gy*.7).toFixed(2)+')');
       }
       requestAnimationFrame(loop);
     }
