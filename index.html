@@ -7,7 +7,7 @@
 <title>Halloween大作戦</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Creepster&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
 <style>
 :root{
   --night:#120920;
@@ -28,7 +28,7 @@ html,body{margin:0;padding:0;background:#120920;}
 body{
   min-height:100%;
   color:#fff;
-  font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   -webkit-tap-highlight-color:transparent;
@@ -75,13 +75,13 @@ body{
 
 .title{
   position:relative;margin:38px 0 0;
-  font-family:"Creepster","M PLUS Rounded 1c",cursive;
+  font-family:"Creepster",var(--pop),cursive;
   font-size:47px;line-height:1;letter-spacing:.04em;color:var(--pumpkin);
   text-shadow:0 0 24px rgba(255,122,24,.6),3px 4px 0 #5A1B0B;
   animation:dropIn .95s .18s var(--spring) both;
 }
 .sub{
-  position:relative;margin:10px 0 0;font-size:27px;font-weight:800;
+  position:relative;margin:10px 0 0;font-size:27px;font-family:var(--pop);font-weight:400;
   text-shadow:2px 3px 0 #6B2FA8;
   animation:dropIn .9s .34s var(--spring) both;
 }
@@ -255,7 +255,7 @@ body{
 .card{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0;text-decoration:none;color:#fff;}
 .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .part{border:1.5px solid var(--c);color:var(--c);border-radius:999px;padding:2px 12px;font-size:11.5px;font-weight:700;white-space:nowrap;}
-.num{font-size:22px;font-weight:800;text-shadow:0 0 12px var(--c);}
+.num{font-size:22px;font-family:var(--pop);font-weight:400;text-shadow:0 0 12px var(--c);}
 .thumb{
   position:relative;min-width:0;background:var(--bone);border-radius:14px;padding:6px 6px 2px;
   box-shadow:0 4px 0 rgba(0,0,0,.5);
@@ -320,7 +320,8 @@ body{
 
 
 /* ChenMe × ハロウィン */
-:root{--chen:#F79CC4;--chen2:#D46FA4;--gold:#FFD469;}
+:root{--chen:#F79CC4;--chen2:#D46FA4;--gold:#FFD469;
+  --pop:"Mochiy Pop One","Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;}
 .day.rest{grid-template-columns:1fr;justify-items:center;text-align:center;gap:14px;
   background:radial-gradient(circle at 50% 30%,rgba(247,156,196,.16),transparent 60%),var(--night2);}
 .day.rest{--c:var(--chen);}
@@ -391,7 +392,7 @@ body{
 .shotcard::before{content:"";position:absolute;inset:0;
   background:radial-gradient(circle at 20% 18%,rgba(255,255,255,.09),transparent 40%);}
 .sc-eyebrow{position:relative;display:block;font-size:11px;font-weight:800;letter-spacing:.22em;color:#FFD98A;}
-.sc-title{position:relative;margin:8px 0 2px;font-size:38px;font-weight:800;line-height:1.1;color:#fff;
+.sc-title{position:relative;margin:8px 0 2px;font-size:38px;font-family:var(--pop);font-weight:400;line-height:1.1;color:#fff;
   text-shadow:0 0 22px rgba(255,150,40,.6),3px 4px 0 #6B2FA8;}
 .sc-quote{
   position:relative;margin:0 0 16px;padding:16px 14px 15px;border-radius:18px;text-align:center;
