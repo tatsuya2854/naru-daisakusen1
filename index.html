@@ -1149,7 +1149,7 @@ body{
 
   document.getElementById('btnShare').addEventListener('click',function(){
     buzz(8);
-    var txt='ChenMeハロウィン大作戦、7日間達成🎃🎉 @naru.enjoy_diet @chenme_official #ChenMeハロウィン大作戦';
+    var txt='ChenMeハロウィン大作戦、7日間達成🎃🎉';
     var url=location.href.split('?')[0];
     if(navigator.share){
       navigator.share({title:'ChenMeハロウィン大作戦',text:txt,url:url}).catch(function(){});
