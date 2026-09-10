@@ -390,11 +390,11 @@ body{
 }
 .shotcard::before{content:"";position:absolute;inset:0;
   background:radial-gradient(circle at 20% 18%,rgba(255,255,255,.09),transparent 40%);}
-.sc-eyebrow{position:relative;font-size:11px;font-weight:800;letter-spacing:.22em;color:#FFD98A;}
+.sc-eyebrow{position:relative;display:block;font-size:11px;font-weight:800;letter-spacing:.22em;color:#FFD98A;}
 .sc-title{position:relative;margin:8px 0 2px;font-size:38px;font-weight:800;line-height:1.1;color:#fff;
   text-shadow:0 0 22px rgba(255,150,40,.6),3px 4px 0 #6B2FA8;}
 .sc-quote{
-  position:relative;margin:14px 2px 2px;padding:16px 14px 15px;border-radius:18px;text-align:center;
+  position:relative;margin:0 0 16px;padding:16px 14px 15px;border-radius:18px;text-align:center;
   background:linear-gradient(150deg,#FFFBF3,#FFEFDB 58%,#FFE4EF);
   border:2px solid rgba(255,182,58,.7);
   box-shadow:0 0 32px -8px rgba(255,182,58,.8),0 16px 34px -20px #000;
@@ -659,12 +659,12 @@ body{
   <div class="ovl" id="ovl" aria-hidden="true">
     <div class="ovl-in">
       <div class="shotcard">
-        <div class="sc-eyebrow">HALLOWEEN 大作戦</div>
-        <div class="sc-title">7日間達成🎉</div>
         <p class="sc-quote">
           <span>昨日より、自分を好きになれた。</span>
           <em>それがいちばんの大成功。</em>
         </p>
+        <div class="sc-eyebrow">HALLOWEEN 大作戦</div>
+        <div class="sc-title">7日間達成🎉</div>
         <div class="sc-row" id="scRow"></div>
         <div class="sc-meta">
           <span class="sc-chip gold" id="scRound">1周目クリア</span>
