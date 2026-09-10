@@ -393,9 +393,21 @@ body{
 .sc-eyebrow{position:relative;font-size:11px;font-weight:800;letter-spacing:.22em;color:#FFD98A;}
 .sc-title{position:relative;margin:8px 0 2px;font-size:38px;font-weight:800;line-height:1.1;color:#fff;
   text-shadow:0 0 22px rgba(255,150,40,.6),3px 4px 0 #6B2FA8;}
-.sc-title span{font-family:inherit;font-size:13.5px;font-weight:800;color:#FFD9EC;
-  display:block;margin-bottom:8px;letter-spacing:.02em;line-height:1.6;
-  text-shadow:0 0 12px rgba(255,150,200,.5);}
+.sc-quote{
+  position:relative;margin:0 0 13px;padding:17px 18px 16px;border-radius:18px;text-align:center;
+  background:linear-gradient(150deg,#FFFBF3,#FFEFDB 58%,#FFE4EF);
+  border:2px solid rgba(255,182,58,.7);
+  box-shadow:0 0 32px -8px rgba(255,182,58,.8),0 16px 34px -20px #000;
+  font-size:clamp(17px,5.1vw,21px);font-weight:800;line-height:1.5;letter-spacing:.01em;
+  animation:quoteGlow 4.5s ease-in-out infinite;
+}
+.sc-quote span,.sc-quote em{display:block;font-style:normal;}
+.sc-quote span{color:#3B1B52;}
+.sc-quote em{margin-top:3px;color:var(--pumpkin);
+  background:linear-gradient(100deg,var(--pumpkin),var(--witch));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+@keyframes quoteGlow{0%,100%{box-shadow:0 0 24px -10px rgba(255,182,58,.7),0 16px 34px -20px #000;}
+  50%{box-shadow:0 0 40px -6px rgba(255,182,58,.95),0 16px 34px -20px #000;}}
 .sc-row{position:relative;display:flex;justify-content:center;align-items:flex-end;gap:2px;margin:14px 0 10px;}
 .sc-row .miniwrap{position:relative;display:block;width:32px;opacity:0;transform:translateY(10px) scale(.6);}
 .sc-row .miniwrap.king{width:50px;margin:0 2px;}
@@ -646,9 +658,13 @@ body{
 
   <div class="ovl" id="ovl" aria-hidden="true">
     <div class="ovl-in">
+      <p class="sc-quote">
+        <span>昨日より、自分を好きになれた。</span>
+        <em>それがいちばんの大成功。</em>
+      </p>
       <div class="shotcard">
         <div class="sc-eyebrow">HALLOWEEN 大作戦</div>
-        <div class="sc-title"><span>昨日より、自分を好きになれた。<br>それがいちばんの大成功。</span>7日間達成🎉</div>
+        <div class="sc-title">7日間達成🎉</div>
         <div class="sc-row" id="scRow"></div>
         <div class="sc-meta">
           <span class="sc-chip gold" id="scRound">1周目クリア</span>
