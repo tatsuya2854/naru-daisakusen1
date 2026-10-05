@@ -1,0 +1,27 @@
+# Halloween大作戦 — Cloudflare Worker（静的ページ配信 + 利用回数の記録）
+name = "naru-daisakusen1"
+main = "src/worker.js"
+compatibility_date = "2026-09-08"
+
+# public/ の中身だけが公開される。ページ本体は Worker を通らずに配信される。
+[assets]
+directory = "public"
+
+# 利用回数の保存先（database_id は秘密情報ではない）
+[[d1_databases]]
+binding = "DB"
+database_name = "naru-daisakusen1"
+database_id = "38738b4f-eb8b-4a7f-87a4-54a83bdfb1f8"
+migrations_dir = "migrations"
+
+# 記録APIの連打よけ（同じ接続元から1分に30回まで。接続元は保存しない）
+[[ratelimits]]
+name = "TRACK_LIMIT"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+
+# 秘密はファイルに書かない:
+#   wrangler secret put STATS_KEY   … 集計ページ（/stats?key=…）を開くための合言葉

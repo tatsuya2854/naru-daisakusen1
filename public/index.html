@@ -746,6 +746,21 @@ body{
   }
   function save(d){ try{ localStorage.setItem(KEY,JSON.stringify({v:1,days:d,ts:Date.now()})); }catch(e){} }
   function buzz(ms){try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}}
+
+  /* 利用回数の記録。送るのは種類だけ（new/open/stamp/complete/share）。個人が分かる情報は送らない */
+  function track(e){
+    try{
+      if(location.protocol.indexOf('http')!==0) return;
+      fetch('/api/track',{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({e:e})}).catch(function(){});
+    }catch(err){}
+  }
+  /* 「開いた」は同じ端末で1日1回だけ数える（日本時間）。初めての端末は new も一緒に送る */
+  (function(){
+    var VKEY='hw-visit', today=new Date(Date.now()+9*60*60*1000).toISOString().slice(0,10), last=null, ok=false;
+    try{ last=localStorage.getItem(VKEY); localStorage.setItem(VKEY,today); ok=true; }catch(e){}
+    if(last===today) return;
+    track(ok&&!last?['new','open']:'open');
+  })();
   function wob(t,s){return Math.sin(t*0.63+s)*0.62+Math.sin(t*1.37+s*2.3)*0.27+Math.sin(t*2.71+s*3.9)*0.11;}
 
   /* ══════════ 音（BGM・効果音） ══════════ */
@@ -1010,6 +1025,7 @@ body{
     }
   }
   function finale(){
+    track('complete');
     sfxFinale(); buzz([18,60,18,60,40,80,60]);
     setTimeout(openOvl,900);
     if(reduce) return;
@@ -1030,7 +1046,7 @@ body{
       save(s);
       if(on){
         r.el.classList.remove('pulse'); void r.el.offsetWidth; r.el.classList.add('pulse');
-        embers(r.el,9,34); buzz(12);
+        embers(r.el,9,34); buzz(12); track('stamp');
       }else{ sfxOff(); buzz(6); }
       var n=render(on);
       if(on && n<rigs.length) sfxLight(n-1);
@@ -1148,7 +1164,7 @@ body{
   });
 
   document.getElementById('btnShare').addEventListener('click',function(){
-    buzz(8);
+    buzz(8); track('share');
     var txt='ChenMeハロウィン大作戦、7日間達成🎃🎉';
     var url=location.href.split('?')[0];
     if(navigator.share){
